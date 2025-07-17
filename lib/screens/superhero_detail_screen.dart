@@ -237,32 +237,32 @@ class SuperheroDetailScreen extends StatelessWidget {
             _buildPowerStatRow(
               "Inteligencia",
               parsePowerStat(superHero.powerStatsResponse.intelligence),
-              Colors.lightBlue,
+              Color(0xff4300FF),
             ),
             _buildPowerStatRow(
               "Fuerza",
               parsePowerStat(superHero.powerStatsResponse.strength),
-              Colors.red,
+              Color(0xffFF0B55),
             ),
             _buildPowerStatRow(
               "Velocidad",
               parsePowerStat(superHero.powerStatsResponse.speed),
-              Colors.lightGreenAccent,
+              Color(0xff06D001),
             ),
             _buildPowerStatRow(
               "Durabilidad",
               parsePowerStat(superHero.powerStatsResponse.durability),
-              Colors.green,
+              Color(0xff810CA8),
             ),
             _buildPowerStatRow(
               "Poder",
               parsePowerStat(superHero.powerStatsResponse.power),
-              Colors.redAccent,
+              Color(0xffFF4C29),
             ),
             _buildPowerStatRow(
               "Combate",
               parsePowerStat(superHero.powerStatsResponse.combat),
-              Colors.grey,
+              Color(0xff735F32),
             ),
           ],
         ),
