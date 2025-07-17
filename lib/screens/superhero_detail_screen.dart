@@ -28,7 +28,11 @@ class SuperheroDetailScreen extends StatelessWidget {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: <Color>[Color(0xffFF0303), Color(0xff2E3840)],
+              colors: <Color>[
+                Color(0xffFF0303),
+                Color(0xff7EACB5),
+                Color(0xff2E3840),
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),

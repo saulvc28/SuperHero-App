@@ -94,6 +94,7 @@ class _SuperheroSearchScreenState extends State<SuperheroSearchScreen>
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     height: 1.2,
+                    fontStyle: FontStyle.italic,
                   ),
                 ),
               ),
