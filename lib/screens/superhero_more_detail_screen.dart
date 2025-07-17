@@ -1,25 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:superhero_app/data/model/superhero_detail_response.dart';
-import 'package:superhero_app/screens/superhero_more_detail_screen.dart';
 
-class SuperheroDetailScreen extends StatelessWidget {
+class SuperheroMoreDetailScreen extends StatelessWidget {
   final SuperheroDetailResponse superHero;
-  const SuperheroDetailScreen({super.key, required this.superHero});
 
-  // Método helper para parsear stats de manera segura
-  double parsePowerStat(String? value) {
-    if (value == null || value.isEmpty || value == 'null') {
-      return 0.0;
-    }
-
-    try {
-      double parsed = double.parse(value);
-      return parsed.clamp(0.0, 100.0);
-    } catch (e) {
-      print('Error parsing power stat: $value -> $e');
-      return 0.0;
-    }
-  }
+  const SuperheroMoreDetailScreen({super.key, required this.superHero});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +19,7 @@ class SuperheroDetailScreen extends StatelessWidget {
             ),
           ),
         ),
-        title: Text("${superHero.name}"),
+        title: Text("Detalles - ${superHero.name}"),
         titleTextStyle: TextStyle(
           color: Colors.white,
           fontSize: 20,
@@ -53,7 +38,7 @@ class SuperheroDetailScreen extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Imagen del héroe
               Center(
@@ -61,11 +46,11 @@ class SuperheroDetailScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                   child: Image.network(
                     superHero.url,
-                    height: 280,
+                    height: 250,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        height: 280,
+                        height: 250,
                         decoration: BoxDecoration(
                           color: Colors.grey[300],
                           borderRadius: BorderRadius.circular(15),
@@ -79,58 +64,53 @@ class SuperheroDetailScreen extends StatelessWidget {
 
               SizedBox(height: 20),
 
-              // Información básica del héroe
+              // Información básica
+              _buildSectionTitle("Información General"),
               _buildInfoCard([
-                _buildHeroTitle(superHero.name),
-                SizedBox(height: 8),
-                _buildHeroSubtitle(superHero.realName),
-                SizedBox(height: 16),
+                _buildInfoRow("Nombre", superHero.name),
+                _buildInfoRow("Nombre Real", superHero.realName),
                 _buildInfoRow("Raza", superHero.raza),
                 _buildInfoRow("Primera Aparición", superHero.firstAppearance),
                 _buildInfoRow("Editorial", superHero.publisher),
-                _buildInfoRow("Ocupación", superHero.occupation),
               ]),
 
               SizedBox(height: 20),
 
-              // Botón para más información
-              Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SuperheroMoreDetailScreen(superHero: superHero),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xff2E3840),
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 5,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.info_outline, size: 20),
-                      SizedBox(width: 8),
-                      Text(
-                        "Ver información completa",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // Biografía
+              _buildSectionTitle("Biografía"),
+              _buildInfoCard([
+                _buildInfoRow("Nombre Completo", superHero.realName),
+                _buildInfoRow("Alter Egos", superHero.alterEgos),
+                _buildInfoRow("Alias", _formatList(superHero.alias)),
+                _buildInfoRow("Lugar de Nacimiento", superHero.placeOfBirth),
+              ]),
+
+              SizedBox(height: 20),
+
+              // Apariencia
+              _buildSectionTitle("Apariencia"),
+              _buildInfoCard([
+                _buildInfoRow("Género", superHero.gender),
+                _buildInfoRow("Altura", _formatList(superHero.height)),
+                _buildInfoRow("Peso", _formatList(superHero.weight)),
+              ]),
+
+              SizedBox(height: 20),
+
+              // Trabajo
+              _buildSectionTitle("Trabajo"),
+              _buildInfoCard([
+                _buildInfoRow("Ocupación", superHero.occupation),
+                _buildInfoRow("Base", superHero.base),
+              ]),
+
+              SizedBox(height: 20),
+
+              // Conexiones
+              _buildSectionTitle("Conexiones"),
+              _buildInfoCard([
+                _buildInfoRow("Familiares", superHero.relatives),
+              ]),
 
               SizedBox(height: 20),
 
@@ -138,7 +118,7 @@ class SuperheroDetailScreen extends StatelessWidget {
               _buildSectionTitle("Estadísticas de Poder"),
               _buildPowerStatsCard(),
 
-              SizedBox(height: 20),
+              SizedBox(height: 30),
             ],
           ),
         ),
@@ -165,40 +145,15 @@ class SuperheroDetailScreen extends StatelessWidget {
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(children: children),
       ),
     );
   }
 
-  Widget _buildHeroTitle(String name) {
-    return Text(
-      name,
-      style: TextStyle(
-        fontSize: 26,
-        fontWeight: FontWeight.bold,
-        color: Color(0xff2E3840),
-      ),
-      textAlign: TextAlign.center,
-    );
-  }
-
-  Widget _buildHeroSubtitle(String realName) {
-    return Text(
-      realName,
-      style: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-        color: Colors.grey[600],
-        fontStyle: FontStyle.italic,
-      ),
-      textAlign: TextAlign.center,
-    );
-  }
-
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -209,16 +164,12 @@ class SuperheroDetailScreen extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Color(0xff2E3840),
-                fontSize: 14,
               ),
             ),
           ),
           Expanded(
             flex: 3,
-            child: Text(
-              value,
-              style: TextStyle(color: Colors.grey[700], fontSize: 14),
-            ),
+            child: Text(value, style: TextStyle(color: Colors.grey[700])),
           ),
         ],
       ),
@@ -233,35 +184,34 @@ class SuperheroDetailScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Barras de poder horizontales
             _buildPowerStatRow(
               "Inteligencia",
-              parsePowerStat(superHero.powerStatsResponse.intelligence),
+              superHero.powerStatsResponse.intelligence,
               Colors.lightBlue,
             ),
             _buildPowerStatRow(
               "Fuerza",
-              parsePowerStat(superHero.powerStatsResponse.strength),
+              superHero.powerStatsResponse.strength,
               Colors.red,
             ),
             _buildPowerStatRow(
               "Velocidad",
-              parsePowerStat(superHero.powerStatsResponse.speed),
+              superHero.powerStatsResponse.speed,
               Colors.lightGreenAccent,
             ),
             _buildPowerStatRow(
               "Durabilidad",
-              parsePowerStat(superHero.powerStatsResponse.durability),
+              superHero.powerStatsResponse.durability,
               Colors.green,
             ),
             _buildPowerStatRow(
               "Poder",
-              parsePowerStat(superHero.powerStatsResponse.power),
+              superHero.powerStatsResponse.power,
               Colors.redAccent,
             ),
             _buildPowerStatRow(
               "Combate",
-              parsePowerStat(superHero.powerStatsResponse.combat),
+              superHero.powerStatsResponse.combat,
               Colors.grey,
             ),
           ],
@@ -270,7 +220,9 @@ class SuperheroDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPowerStatRow(String label, double value, Color color) {
+  Widget _buildPowerStatRow(String label, String? value, Color color) {
+    double statValue = _parsePowerStat(value);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -282,7 +234,6 @@ class SuperheroDetailScreen extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Color(0xff2E3840),
-                fontSize: 14,
               ),
             ),
           ),
@@ -292,7 +243,7 @@ class SuperheroDetailScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: LinearProgressIndicator(
-                    value: value / 100,
+                    value: statValue / 100,
                     backgroundColor: Colors.grey[300],
                     valueColor: AlwaysStoppedAnimation<Color>(color),
                     minHeight: 8,
@@ -300,12 +251,8 @@ class SuperheroDetailScreen extends StatelessWidget {
                 ),
                 SizedBox(width: 10),
                 Text(
-                  value.toStringAsFixed(0),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: color,
-                    fontSize: 14,
-                  ),
+                  statValue.toStringAsFixed(0),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: color),
                 ),
               ],
             ),
@@ -313,5 +260,45 @@ class SuperheroDetailScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  double _parsePowerStat(String? value) {
+    if (value == null || value.isEmpty || value == 'null') {
+      return 0.0;
+    }
+
+    try {
+      double parsed = double.parse(value);
+      return parsed.clamp(0.0, 100.0);
+    } catch (e) {
+      return 0.0;
+    }
+  }
+
+  String _formatList(dynamic list) {
+    if (list == null) {
+      return "Desconocido";
+    }
+
+    // Si es un string, simplemente retornarlo
+    if (list is String) {
+      return list.isEmpty ? "Desconocido" : list;
+    }
+
+    // Si es una lista
+    if (list is List) {
+      if (list.isEmpty) {
+        return "Desconocido";
+      }
+      // Convertir todos los elementos a string y filtrar los vacíos
+      List<String> stringList = list
+          .map((item) => item.toString())
+          .where((item) => item.isNotEmpty && item != 'null')
+          .toList();
+
+      return stringList.isEmpty ? "Desconocido" : stringList.join(", ");
+    }
+
+    return "Desconocido";
   }
 }
