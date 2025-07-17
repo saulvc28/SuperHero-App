@@ -73,20 +73,37 @@ class SuperheroDetailScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  superHero.realName ?? 'Desconocido',
+                  superHero.realName,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  superHero.firstAppearance ?? 'Desconocido',
+                  superHero.raza,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.center,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    superHero.firstAppearance,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 Text(
-                  superHero.publisher ?? 'Desconocido',
+                  superHero.publisher,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
-                Text(
-                  superHero.alignment ?? 'Desconocido',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    superHero.occupation,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 SizedBox(
                   width: double.infinity,

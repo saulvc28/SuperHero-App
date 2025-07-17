@@ -5,7 +5,8 @@ class SuperheroDetailResponse {
   final String realName;
   final String firstAppearance;
   final String publisher;
-  final String alignment;
+  final String occupation;
+  final String raza;
   final PowerStatsResponse powerStatsResponse;
 
   SuperheroDetailResponse({
@@ -15,7 +16,8 @@ class SuperheroDetailResponse {
     required this.realName,
     required this.firstAppearance,
     required this.publisher,
-    required this.alignment,
+    required this.occupation,
+    required this.raza,
     required this.powerStatsResponse,
   });
 
@@ -27,7 +29,8 @@ class SuperheroDetailResponse {
       realName: json["biography"]["full-name"],
       firstAppearance: json["biography"]["first-appearance"],
       publisher: json["biography"]["publisher"],
-      alignment: json["biography"]["alignment"],
+      occupation: json["work"]["occupation"],
+      raza: json["appearance"]["race"],
       powerStatsResponse: PowerStatsResponse.fromJson(json["powerstats"]),
     );
   }
